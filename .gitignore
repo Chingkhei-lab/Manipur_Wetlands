@@ -1,0 +1,9 @@
+designs/
+design/
+PROJECT_MEMORY.md
+project memory.md
+__pycache__/
+*.pyc
+node_modules/
+.env
+.DS_Store
