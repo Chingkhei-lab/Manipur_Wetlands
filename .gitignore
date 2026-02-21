@@ -1,9 +1,51 @@
+# Design & Documentation
 designs/
 design/
 PROJECT_MEMORY.md
 project memory.md
+
+# OS/System
+.DS_Store
+Thumbs.db
+
+# Environment Variables
+.env
+.env.local
+
+# Node / JS
+node_modules/
+dist/
+dist-ssr/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python
 __pycache__/
 *.pyc
-node_modules/
-.env
-.DS_Store
+*.pyo
+
+# C# / .NET
+[Bb]in/
+[Oo]bj/
+*.user
+*.userosscache
+*.sln.docstates
+
+# IDE / Editor
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Logs & Temporary files
+*.log
+temp/
+tmp/
+temp_images/

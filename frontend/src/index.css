@@ -8,3 +8,12 @@
 .material-symbols-outlined {
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
+
+body {
+  @apply bg-background-light text-[#121614] dark:bg-background-dark dark:text-white;
+}
+
+@keyframes fade {
+  0% { opacity: 0.2; transform: scale(0.98); }
+  100% { opacity: 1; transform: scale(1); }
+}
