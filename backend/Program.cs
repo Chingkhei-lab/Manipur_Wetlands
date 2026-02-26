@@ -17,7 +17,7 @@ builder.Services.AddSwaggerGen();
 // Configure EF Core Context
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ManipurWetlandsContext>(options =>
-    options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 0))));
+    options.UseNpgsql(connectionString));
 
 // Configure CORS
 builder.Services.AddCors(options =>

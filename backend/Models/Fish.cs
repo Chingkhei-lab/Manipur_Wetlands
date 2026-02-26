@@ -7,19 +7,19 @@ public partial class Fish
 {
     public int Id { get; set; }
 
-    public string? CommonId { get; set; }
-
     public string? CommonName { get; set; }
 
     public string? ScientificName { get; set; }
 
     public string? LocalName { get; set; }
 
-    public string? EconomicValue { get; set; }
-
     public string? Description { get; set; }
 
     public string? ImageUrl { get; set; }
+
+    public string? CommonId { get; set; }
+
+    public string? EconomicValue { get; set; }
 
     public virtual ICollection<Wetland> Wetlands { get; set; } = new List<Wetland>();
 }

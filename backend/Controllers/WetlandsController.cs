@@ -32,8 +32,8 @@ namespace backend.Controllers
                  var wetland = await _context.Wetlands
                     .Include(w => w.Animals)
                     .Include(w => w.Birds)
-                    .Include(w => w.Fis)
-                    .Include(w => w.Flors)
+                    .Include(w => w.Fish)
+                    .Include(w => w.Floras)
                     .Include(w => w.Insects)
                     .FirstOrDefaultAsync(w => w.Id == wetlandId);
 
@@ -45,8 +45,8 @@ namespace backend.Controllers
                 var wetland = await _context.Wetlands
                     .Include(w => w.Animals)
                     .Include(w => w.Birds)
-                    .Include(w => w.Fis)
-                    .Include(w => w.Flors)
+                    .Include(w => w.Fish)
+                    .Include(w => w.Floras)
                     .Include(w => w.Insects)
                     .FirstOrDefaultAsync(w => w.CommonId == id);
 

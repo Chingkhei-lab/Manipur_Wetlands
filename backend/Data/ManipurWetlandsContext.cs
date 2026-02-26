@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
 using backend.Models;
 
 namespace backend.Data;
@@ -30,22 +29,20 @@ public partial class ManipurWetlandsContext : DbContext
     public virtual DbSet<Wetland> Wetlands { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=localhost;database=manipur_wetlands;user=root;password=ChinGkheI@123", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.44-mysql"));
+    {
+        // Connection string is managed in Program.cs via Dependency Injection.
+        // This method can be left empty or removed if not needed for design-time tools.
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder
-            .UseCollation("utf8mb4_0900_ai_ci")
-            .HasCharSet("utf8mb4");
-
         modelBuilder.Entity<Animal>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
+            entity.HasKey(e => e.Id).HasName("animals_pkey");
 
             entity.ToTable("animals");
 
-            entity.HasIndex(e => e.CommonId, "common_id").IsUnique();
+            entity.HasIndex(e => e.CommonId, "animals_common_id_key").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CommonId)
@@ -54,9 +51,7 @@ public partial class ManipurWetlandsContext : DbContext
             entity.Property(e => e.CommonName)
                 .HasMaxLength(255)
                 .HasColumnName("common_name");
-            entity.Property(e => e.Description)
-                .HasColumnType("text")
-                .HasColumnName("description");
+            entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.ImageUrl)
                 .HasMaxLength(255)
                 .HasColumnName("image_url");
@@ -73,11 +68,11 @@ public partial class ManipurWetlandsContext : DbContext
 
         modelBuilder.Entity<Bird>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
+            entity.HasKey(e => e.Id).HasName("birds_pkey");
 
             entity.ToTable("birds");
 
-            entity.HasIndex(e => e.CommonId, "common_id").IsUnique();
+            entity.HasIndex(e => e.CommonId, "birds_common_id_key").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CommonId)
@@ -86,9 +81,7 @@ public partial class ManipurWetlandsContext : DbContext
             entity.Property(e => e.CommonName)
                 .HasMaxLength(255)
                 .HasColumnName("common_name");
-            entity.Property(e => e.Description)
-                .HasColumnType("text")
-                .HasColumnName("description");
+            entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.ImageUrl)
                 .HasMaxLength(255)
                 .HasColumnName("image_url");
@@ -105,11 +98,11 @@ public partial class ManipurWetlandsContext : DbContext
 
         modelBuilder.Entity<Fish>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
+            entity.HasKey(e => e.Id).HasName("fish_pkey");
 
             entity.ToTable("fish");
 
-            entity.HasIndex(e => e.CommonId, "common_id").IsUnique();
+            entity.HasIndex(e => e.CommonId, "fish_common_id_key").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CommonId)
@@ -118,9 +111,7 @@ public partial class ManipurWetlandsContext : DbContext
             entity.Property(e => e.CommonName)
                 .HasMaxLength(255)
                 .HasColumnName("common_name");
-            entity.Property(e => e.Description)
-                .HasColumnType("text")
-                .HasColumnName("description");
+            entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.EconomicValue)
                 .HasMaxLength(100)
                 .HasColumnName("economic_value");
@@ -137,11 +128,11 @@ public partial class ManipurWetlandsContext : DbContext
 
         modelBuilder.Entity<Flora>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
+            entity.HasKey(e => e.Id).HasName("flora_pkey");
 
             entity.ToTable("flora");
 
-            entity.HasIndex(e => e.CommonId, "common_id").IsUnique();
+            entity.HasIndex(e => e.CommonId, "flora_common_id_key").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CommonId)
@@ -150,9 +141,7 @@ public partial class ManipurWetlandsContext : DbContext
             entity.Property(e => e.CommonName)
                 .HasMaxLength(255)
                 .HasColumnName("common_name");
-            entity.Property(e => e.Description)
-                .HasColumnType("text")
-                .HasColumnName("description");
+            entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.ImageUrl)
                 .HasMaxLength(255)
                 .HasColumnName("image_url");
@@ -169,11 +158,11 @@ public partial class ManipurWetlandsContext : DbContext
 
         modelBuilder.Entity<Insect>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
+            entity.HasKey(e => e.Id).HasName("insects_pkey");
 
             entity.ToTable("insects");
 
-            entity.HasIndex(e => e.CommonId, "common_id").IsUnique();
+            entity.HasIndex(e => e.CommonId, "insects_common_id_key").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CommonId)
@@ -182,9 +171,7 @@ public partial class ManipurWetlandsContext : DbContext
             entity.Property(e => e.CommonName)
                 .HasMaxLength(255)
                 .HasColumnName("common_name");
-            entity.Property(e => e.Description)
-                .HasColumnType("text")
-                .HasColumnName("description");
+            entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.ImageUrl)
                 .HasMaxLength(255)
                 .HasColumnName("image_url");
@@ -201,11 +188,11 @@ public partial class ManipurWetlandsContext : DbContext
 
         modelBuilder.Entity<Wetland>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
+            entity.HasKey(e => e.Id).HasName("wetlands_pkey");
 
             entity.ToTable("wetlands");
 
-            entity.HasIndex(e => e.CommonId, "common_id").IsUnique();
+            entity.HasIndex(e => e.CommonId, "wetlands_common_id_key").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.AreaSqKm)
@@ -214,9 +201,7 @@ public partial class ManipurWetlandsContext : DbContext
             entity.Property(e => e.CommonId)
                 .HasMaxLength(50)
                 .HasColumnName("common_id");
-            entity.Property(e => e.Description)
-                .HasColumnType("text")
-                .HasColumnName("description");
+            entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.District)
                 .HasMaxLength(100)
                 .HasColumnName("district");
@@ -241,19 +226,14 @@ public partial class ManipurWetlandsContext : DbContext
                     "WetlandAnimal",
                     r => r.HasOne<Animal>().WithMany()
                         .HasForeignKey("AnimalId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("wetland_animals_ibfk_2"),
+                        .HasConstraintName("fk_wa_animal"),
                     l => l.HasOne<Wetland>().WithMany()
                         .HasForeignKey("WetlandId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("wetland_animals_ibfk_1"),
+                        .HasConstraintName("fk_wa_wetland"),
                     j =>
                     {
-                        j.HasKey("WetlandId", "AnimalId")
-                            .HasName("PRIMARY")
-                            .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+                        j.HasKey("WetlandId", "AnimalId").HasName("wetland_animals_pkey");
                         j.ToTable("wetland_animals");
-                        j.HasIndex(new[] { "AnimalId" }, "animal_id");
                         j.IndexerProperty<int>("WetlandId").HasColumnName("wetland_id");
                         j.IndexerProperty<int>("AnimalId").HasColumnName("animal_id");
                     });
@@ -263,65 +243,50 @@ public partial class ManipurWetlandsContext : DbContext
                     "WetlandBird",
                     r => r.HasOne<Bird>().WithMany()
                         .HasForeignKey("BirdId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("wetland_birds_ibfk_2"),
+                        .HasConstraintName("fk_wb_bird"),
                     l => l.HasOne<Wetland>().WithMany()
                         .HasForeignKey("WetlandId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("wetland_birds_ibfk_1"),
+                        .HasConstraintName("fk_wb_wetland"),
                     j =>
                     {
-                        j.HasKey("WetlandId", "BirdId")
-                            .HasName("PRIMARY")
-                            .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+                        j.HasKey("WetlandId", "BirdId").HasName("wetland_birds_pkey");
                         j.ToTable("wetland_birds");
-                        j.HasIndex(new[] { "BirdId" }, "bird_id");
                         j.IndexerProperty<int>("WetlandId").HasColumnName("wetland_id");
                         j.IndexerProperty<int>("BirdId").HasColumnName("bird_id");
                     });
 
-            entity.HasMany(d => d.Fis).WithMany(p => p.Wetlands)
+            entity.HasMany(d => d.Fish).WithMany(p => p.Wetlands)
                 .UsingEntity<Dictionary<string, object>>(
                     "WetlandFish",
                     r => r.HasOne<Fish>().WithMany()
-                        .HasForeignKey("FisId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("wetland_fish_ibfk_2"),
+                        .HasForeignKey("FishId")
+                        .HasConstraintName("fk_wf_fish"),
                     l => l.HasOne<Wetland>().WithMany()
                         .HasForeignKey("WetlandId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("wetland_fish_ibfk_1"),
+                        .HasConstraintName("fk_wf_wetland"),
                     j =>
                     {
-                        j.HasKey("WetlandId", "FisId")
-                            .HasName("PRIMARY")
-                            .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+                        j.HasKey("WetlandId", "FishId").HasName("wetland_fish_pkey");
                         j.ToTable("wetland_fish");
-                        j.HasIndex(new[] { "FisId" }, "fis_id");
                         j.IndexerProperty<int>("WetlandId").HasColumnName("wetland_id");
-                        j.IndexerProperty<int>("FisId").HasColumnName("fis_id");
+                        j.IndexerProperty<int>("FishId").HasColumnName("fish_id");
                     });
 
-            entity.HasMany(d => d.Flors).WithMany(p => p.Wetlands)
+            entity.HasMany(d => d.Floras).WithMany(p => p.Wetlands)
                 .UsingEntity<Dictionary<string, object>>(
                     "WetlandFlora",
                     r => r.HasOne<Flora>().WithMany()
-                        .HasForeignKey("FlorId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("wetland_flora_ibfk_2"),
+                        .HasForeignKey("FloraId")
+                        .HasConstraintName("fk_wfl_flora"),
                     l => l.HasOne<Wetland>().WithMany()
                         .HasForeignKey("WetlandId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("wetland_flora_ibfk_1"),
+                        .HasConstraintName("fk_wfl_wetland"),
                     j =>
                     {
-                        j.HasKey("WetlandId", "FlorId")
-                            .HasName("PRIMARY")
-                            .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+                        j.HasKey("WetlandId", "FloraId").HasName("wetland_flora_pkey");
                         j.ToTable("wetland_flora");
-                        j.HasIndex(new[] { "FlorId" }, "flor_id");
                         j.IndexerProperty<int>("WetlandId").HasColumnName("wetland_id");
-                        j.IndexerProperty<int>("FlorId").HasColumnName("flor_id");
+                        j.IndexerProperty<int>("FloraId").HasColumnName("flora_id");
                     });
 
             entity.HasMany(d => d.Insects).WithMany(p => p.Wetlands)
@@ -329,19 +294,14 @@ public partial class ManipurWetlandsContext : DbContext
                     "WetlandInsect",
                     r => r.HasOne<Insect>().WithMany()
                         .HasForeignKey("InsectId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("wetland_insects_ibfk_2"),
+                        .HasConstraintName("fk_wi_insect"),
                     l => l.HasOne<Wetland>().WithMany()
                         .HasForeignKey("WetlandId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("wetland_insects_ibfk_1"),
+                        .HasConstraintName("fk_wi_wetland"),
                     j =>
                     {
-                        j.HasKey("WetlandId", "InsectId")
-                            .HasName("PRIMARY")
-                            .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+                        j.HasKey("WetlandId", "InsectId").HasName("wetland_insects_pkey");
                         j.ToTable("wetland_insects");
-                        j.HasIndex(new[] { "InsectId" }, "insect_id");
                         j.IndexerProperty<int>("WetlandId").HasColumnName("wetland_id");
                         j.IndexerProperty<int>("InsectId").HasColumnName("insect_id");
                     });
