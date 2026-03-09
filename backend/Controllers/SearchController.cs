@@ -30,7 +30,7 @@ namespace backend.Controllers
                     name = w.Name,
                     type = "Wetland",
                     image_url = w.ImageUrl,
-                    link_id = w.CommonId
+                    link_id = w.Id
                 })
                 .ToListAsync();
             results.AddRange(wetlands);
@@ -47,7 +47,7 @@ namespace backend.Controllers
                     name = a.CommonName ?? a.LocalName ?? a.ScientificName,
                     type = "Animal",
                     image_url = a.ImageUrl,
-                    link_id = a.CommonId
+                    link_id = a.Id
                 })
                 .ToListAsync();
             results.AddRange(animals);
@@ -64,7 +64,7 @@ namespace backend.Controllers
                     name = b.CommonName ?? b.LocalName ?? b.ScientificName,
                     type = "Bird",
                     image_url = b.ImageUrl,
-                    link_id = b.CommonId
+                    link_id = b.Id
                 })
                 .ToListAsync();
             results.AddRange(birds);
@@ -81,7 +81,7 @@ namespace backend.Controllers
                     name = f.CommonName ?? f.LocalName ?? f.ScientificName,
                     type = "Fish",
                     image_url = f.ImageUrl,
-                    link_id = f.CommonId
+                    link_id = f.Id
                 })
                 .ToListAsync();
             results.AddRange(fish);
@@ -98,7 +98,7 @@ namespace backend.Controllers
                     name = f.CommonName ?? f.LocalName ?? f.ScientificName,
                     type = "Flora",
                     image_url = f.ImageUrl,
-                    link_id = f.CommonId
+                    link_id = f.Id
                 })
                 .ToListAsync();
             results.AddRange(flora);
@@ -115,7 +115,7 @@ namespace backend.Controllers
                     name = i.CommonName ?? i.LocalName ?? i.ScientificName,
                     type = "Insect",
                     image_url = i.ImageUrl,
-                    link_id = i.CommonId
+                    link_id = i.Id
                 })
                 .ToListAsync();
             results.AddRange(insects);

@@ -23,36 +23,20 @@ namespace backend.Controllers
             return await _context.Wetlands.ToListAsync();
         }
 
-        // GET: api/Wetlands/WL-001 or 5
+        // GET: api/Wetlands/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Wetland>> GetWetland(string id)
+        public async Task<ActionResult<Wetland>> GetWetland(int id)
         {
-            if (int.TryParse(id, out int wetlandId))
-            {
-                 var wetland = await _context.Wetlands
-                    .Include(w => w.Animals)
-                    .Include(w => w.Birds)
-                    .Include(w => w.Fish)
-                    .Include(w => w.Floras)
-                    .Include(w => w.Insects)
-                    .FirstOrDefaultAsync(w => w.Id == wetlandId);
+            var wetland = await _context.Wetlands
+                .Include(w => w.Animals)
+                .Include(w => w.Birds)
+                .Include(w => w.Fish)
+                .Include(w => w.Floras)
+                .Include(w => w.Insects)
+                .FirstOrDefaultAsync(w => w.Id == id);
 
-                if (wetland == null) return NotFound();
-                return wetland;
-            }
-            else
-            {
-                var wetland = await _context.Wetlands
-                    .Include(w => w.Animals)
-                    .Include(w => w.Birds)
-                    .Include(w => w.Fish)
-                    .Include(w => w.Floras)
-                    .Include(w => w.Insects)
-                    .FirstOrDefaultAsync(w => w.CommonId == id);
-
-                if (wetland == null) return NotFound();
-                return wetland;
-            }
+            if (wetland == null) return NotFound();
+            return wetland;
         }
     }
 }

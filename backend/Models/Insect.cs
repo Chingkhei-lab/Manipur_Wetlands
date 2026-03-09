@@ -17,9 +17,15 @@ public partial class Insect
 
     public string? ImageUrl { get; set; }
 
-    public string? CommonId { get; set; }
+    
 
     public string? RoleInEcosystem { get; set; }
 
-    public virtual ICollection<Wetland> Wetlands { get; set; } = new List<Wetland>();
+    public string? CommonId { get; set; }
+
+    public string? TaxonomyGroup { get; set; }
+
+        public string? ImageUrl2 { get; set; }
+
+public virtual ICollection<Wetland> Wetlands { get; set; } = new List<Wetland>();
 }

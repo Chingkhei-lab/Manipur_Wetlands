@@ -28,7 +28,6 @@ __pycache__/
 # C# / .NET
 [Bb]in/
 [Oo]bj/
-appsettings.json
 *.user
 *.userosscache
 *.sln.docstates

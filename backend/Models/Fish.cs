@@ -17,9 +17,13 @@ public partial class Fish
 
     public string? ImageUrl { get; set; }
 
-    public string? CommonId { get; set; }
+    
 
     public string? EconomicValue { get; set; }
 
-    public virtual ICollection<Wetland> Wetlands { get; set; } = new List<Wetland>();
+    public string? CommonId { get; set; }
+
+        public string? TaxonomyGroup { get; set; }
+
+public virtual ICollection<Wetland> Wetlands { get; set; } = new List<Wetland>();
 }

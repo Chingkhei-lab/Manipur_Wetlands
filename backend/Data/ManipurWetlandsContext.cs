@@ -26,6 +26,8 @@ public partial class ManipurWetlandsContext : DbContext
 
     public virtual DbSet<Insect> Insects { get; set; }
 
+    public virtual DbSet<Manager> Managers { get; set; }
+
     public virtual DbSet<Wetland> Wetlands { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -42,12 +44,7 @@ public partial class ManipurWetlandsContext : DbContext
 
             entity.ToTable("animals");
 
-            entity.HasIndex(e => e.CommonId, "animals_common_id_key").IsUnique();
-
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.CommonId)
-                .HasMaxLength(50)
-                .HasColumnName("common_id");
             entity.Property(e => e.CommonName)
                 .HasMaxLength(255)
                 .HasColumnName("common_name");
@@ -64,6 +61,8 @@ public partial class ManipurWetlandsContext : DbContext
             entity.Property(e => e.ScientificName)
                 .HasMaxLength(255)
                 .HasColumnName("scientific_name");
+            entity.Property(e => e.TaxonomyGroup).HasMaxLength(100).HasColumnName("taxonomy_group");
+            entity.Property(e => e.CommonId).HasMaxLength(50).HasColumnName("common_id");
         });
 
         modelBuilder.Entity<Bird>(entity =>
@@ -72,12 +71,7 @@ public partial class ManipurWetlandsContext : DbContext
 
             entity.ToTable("birds");
 
-            entity.HasIndex(e => e.CommonId, "birds_common_id_key").IsUnique();
-
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.CommonId)
-                .HasMaxLength(50)
-                .HasColumnName("common_id");
             entity.Property(e => e.CommonName)
                 .HasMaxLength(255)
                 .HasColumnName("common_name");
@@ -94,6 +88,9 @@ public partial class ManipurWetlandsContext : DbContext
             entity.Property(e => e.Seasonality)
                 .HasMaxLength(50)
                 .HasColumnName("seasonality");
+            entity.Property(e => e.TaxonomyGroup).HasMaxLength(100).HasColumnName("taxonomy_group");
+            entity.Property(e => e.ImageUrl2).HasMaxLength(255).HasColumnName("image_url_2");
+            entity.Property(e => e.CommonId).HasMaxLength(50).HasColumnName("common_id");
         });
 
         modelBuilder.Entity<Fish>(entity =>
@@ -102,12 +99,7 @@ public partial class ManipurWetlandsContext : DbContext
 
             entity.ToTable("fish");
 
-            entity.HasIndex(e => e.CommonId, "fish_common_id_key").IsUnique();
-
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.CommonId)
-                .HasMaxLength(50)
-                .HasColumnName("common_id");
             entity.Property(e => e.CommonName)
                 .HasMaxLength(255)
                 .HasColumnName("common_name");
@@ -124,6 +116,8 @@ public partial class ManipurWetlandsContext : DbContext
             entity.Property(e => e.ScientificName)
                 .HasMaxLength(255)
                 .HasColumnName("scientific_name");
+            entity.Property(e => e.TaxonomyGroup).HasMaxLength(100).HasColumnName("taxonomy_group");
+            entity.Property(e => e.CommonId).HasMaxLength(50).HasColumnName("common_id");
         });
 
         modelBuilder.Entity<Flora>(entity =>
@@ -132,12 +126,7 @@ public partial class ManipurWetlandsContext : DbContext
 
             entity.ToTable("flora");
 
-            entity.HasIndex(e => e.CommonId, "flora_common_id_key").IsUnique();
-
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.CommonId)
-                .HasMaxLength(50)
-                .HasColumnName("common_id");
             entity.Property(e => e.CommonName)
                 .HasMaxLength(255)
                 .HasColumnName("common_name");
@@ -154,6 +143,9 @@ public partial class ManipurWetlandsContext : DbContext
             entity.Property(e => e.ScientificName)
                 .HasMaxLength(255)
                 .HasColumnName("scientific_name");
+            entity.Property(e => e.TaxonomyGroup).HasMaxLength(100).HasColumnName("taxonomy_group");
+            entity.Property(e => e.ImageUrl2).HasMaxLength(255).HasColumnName("image_url_2");
+            entity.Property(e => e.CommonId).HasMaxLength(50).HasColumnName("common_id");
         });
 
         modelBuilder.Entity<Insect>(entity =>
@@ -162,12 +154,7 @@ public partial class ManipurWetlandsContext : DbContext
 
             entity.ToTable("insects");
 
-            entity.HasIndex(e => e.CommonId, "insects_common_id_key").IsUnique();
-
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.CommonId)
-                .HasMaxLength(50)
-                .HasColumnName("common_id");
             entity.Property(e => e.CommonName)
                 .HasMaxLength(255)
                 .HasColumnName("common_name");
@@ -184,6 +171,9 @@ public partial class ManipurWetlandsContext : DbContext
             entity.Property(e => e.ScientificName)
                 .HasMaxLength(255)
                 .HasColumnName("scientific_name");
+            entity.Property(e => e.TaxonomyGroup).HasMaxLength(100).HasColumnName("taxonomy_group");
+            entity.Property(e => e.ImageUrl2).HasMaxLength(255).HasColumnName("image_url_2");
+            entity.Property(e => e.CommonId).HasMaxLength(50).HasColumnName("common_id");
         });
 
         modelBuilder.Entity<Wetland>(entity =>
@@ -192,15 +182,7 @@ public partial class ManipurWetlandsContext : DbContext
 
             entity.ToTable("wetlands");
 
-            entity.HasIndex(e => e.CommonId, "wetlands_common_id_key").IsUnique();
-
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.AreaSqKm)
-                .HasPrecision(10, 2)
-                .HasColumnName("area_sq_km");
-            entity.Property(e => e.CommonId)
-                .HasMaxLength(50)
-                .HasColumnName("common_id");
             entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.District)
                 .HasMaxLength(100)
@@ -220,6 +202,10 @@ public partial class ManipurWetlandsContext : DbContext
             entity.Property(e => e.Type)
                 .HasMaxLength(100)
                 .HasColumnName("type");
+            entity.Property(e => e.Coordinates).HasMaxLength(255).HasColumnName("coordinates");
+            entity.Property(e => e.CommonId).HasMaxLength(50).HasColumnName("common_id");
+            entity.Property(e => e.Location).HasMaxLength(255).HasColumnName("location");
+            entity.Property(e => e.AreaHa).HasPrecision(10, 2).HasColumnName("area_ha");
 
             entity.HasMany(d => d.Animals).WithMany(p => p.Wetlands)
                 .UsingEntity<Dictionary<string, object>>(
@@ -305,6 +291,19 @@ public partial class ManipurWetlandsContext : DbContext
                         j.IndexerProperty<int>("WetlandId").HasColumnName("wetland_id");
                         j.IndexerProperty<int>("InsectId").HasColumnName("insect_id");
                     });
+        });
+
+        modelBuilder.Entity<Manager>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("managers_pkey");
+            entity.ToTable("managers");
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.FullName).HasMaxLength(255).HasColumnName("full_name");
+            entity.Property(e => e.Email).HasMaxLength(255).HasColumnName("email");
+            entity.Property(e => e.PasswordHash).HasMaxLength(255).HasColumnName("password_hash");
+            entity.Property(e => e.IsActive).HasColumnName("is_active");
+            entity.Property(e => e.RegistrationCode).HasMaxLength(50).HasColumnName("registration_code");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
         });
 
         OnModelCreatingPartial(modelBuilder);

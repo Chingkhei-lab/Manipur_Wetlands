@@ -21,9 +21,9 @@ public partial class Wetland
 
     public string? ImageUrl { get; set; }
 
-    public string? CommonId { get; set; }
+    
 
-    public decimal? AreaSqKm { get; set; }
+    
 
     public virtual ICollection<Animal> Animals { get; set; } = new List<Animal>();
 
@@ -33,5 +33,13 @@ public partial class Wetland
 
     public virtual ICollection<Flora> Floras { get; set; } = new List<Flora>();
 
-    public virtual ICollection<Insect> Insects { get; set; } = new List<Insect>();
+        public decimal? AreaHa { get; set; }
+
+    public string? Location { get; set; }
+
+    public string? Coordinates { get; set; }
+
+    public string? CommonId { get; set; }
+
+public virtual ICollection<Insect> Insects { get; set; } = new List<Insect>();
 }

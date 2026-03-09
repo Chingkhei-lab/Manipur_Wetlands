@@ -31,7 +31,7 @@ const About = () => {
                             {[
                                 { name: "React", icon: "data_object" },
                                 { name: "ASP.NET Core", icon: "dns" },
-                                { name: "MySQL", icon: "database" },
+                                { name: "PostgreSQL", icon: "database" },
                                 { name: "Tailwind CSS", icon: "format_paint" }
                             ].map((tech) => (
                                 <div key={tech.name} className="bg-white dark:bg-[#1a2620] border border-[#dde3e0] dark:border-primary/20 p-6 rounded-xl flex flex-col items-center justify-center gap-3 shadow-sm hover:shadow-lg transition-all group">

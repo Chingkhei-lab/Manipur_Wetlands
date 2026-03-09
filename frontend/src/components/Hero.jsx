@@ -38,7 +38,7 @@ const Hero = () => {
     const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
 
     return (
-        <section className="relative w-full h-[650px] overflow-hidden group">
+        <section className="relative w-full h-[500px] md:h-[650px] overflow-hidden group">
             {heroSlides.map((slide, index) => (
                 <div
                     key={slide.id}
@@ -47,31 +47,32 @@ const Hero = () => {
                     <div
                         className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-[10000ms] ease-out"
                         style={{
-                            backgroundImage: `linear-gradient(to right, rgba(20, 30, 24, 0.85) 0%, rgba(20, 30, 24, 0.4) 50%, rgba(20, 30, 24, 0) 100%), url('${slide.image}')`,
+                            backgroundImage: `linear-gradient(to bottom, rgba(20, 30, 24, 0.85) 0%, rgba(20, 30, 24, 0.6) 50%, rgba(20, 30, 24, 0.2) 100%), url('${slide.image}')`,
+                            backgroundColor: '#141e18',
                             transform: index === currentSlide ? 'scale(1)' : 'scale(1.05)'
                         }}
                     ></div>
 
-                    <div className="relative max-w-7xl mx-auto px-6 lg:px-10 h-full flex flex-col justify-center items-start">
-                        <div className={`max-w-2xl space-y-6 transition-all duration-1000 delay-300 transform ${index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 text-primary border border-primary/30 text-xs font-bold uppercase tracking-widest backdrop-blur-md">
-                                <span className="material-symbols-outlined text-sm">verified</span>
+                    <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 h-full flex flex-col justify-start md:justify-center items-start pt-14 md:pt-0">
+                        <div className={`max-w-2xl space-y-4 md:space-y-6 transition-all duration-1000 delay-300 transform ${index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+                            <div className="inline-flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1 rounded-full bg-primary/20 text-primary border border-primary/30 text-[10px] md:text-xs font-bold uppercase tracking-widest backdrop-blur-md">
+                                <span className="material-symbols-outlined text-xs md:text-sm">verified</span>
                                 {slide.badge}
                             </div>
-                            <h1 className="text-5xl lg:text-7xl font-extrabold text-white leading-[1.1] tracking-tight drop-shadow-lg">
+                            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-white leading-[1.1] md:leading-[1.1] tracking-tight drop-shadow-lg">
                                 {slide.title}
                             </h1>
-                            <p className="text-xl text-white/90 font-medium leading-relaxed drop-shadow-md">
+                            <p className="text-base sm:text-lg md:text-xl text-white/90 font-medium leading-relaxed drop-shadow-md">
                                 {slide.subtitle}
                             </p>
-                            <div className="flex flex-wrap gap-4 pt-4">
-                                <button className="bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-xl text-lg font-bold shadow-xl shadow-primary/30 transition-all flex items-center gap-3" onClick={() => window.location.href = '/catalog'}>
+                            <div className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-4 md:pt-4 mt-10 md:mt-0 w-full sm:w-auto">
+                                <button className="bg-primary hover:bg-primary/90 text-white px-6 py-3 md:px-8 md:py-4 rounded-xl text-base md:text-lg font-bold shadow-xl shadow-primary/30 transition-all flex items-center justify-center gap-2 md:gap-3 w-full sm:w-auto" onClick={() => window.location.href = '/catalog'}>
                                     <span>Explore the Database</span>
-                                    <span className="material-symbols-outlined">arrow_forward</span>
+                                    <span className="material-symbols-outlined text-sm md:text-base">arrow_forward</span>
                                 </button>
                                 <button
                                     onClick={() => window.location.href = '/map'}
-                                    className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/30 px-8 py-4 rounded-xl text-lg font-bold transition-all"
+                                    className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/30 px-6 py-3 md:px-8 md:py-4 rounded-xl text-base md:text-lg font-bold transition-all w-full sm:w-auto text-center"
                                 >
                                     View Interactive Map
                                 </button>
@@ -104,8 +105,8 @@ const Hero = () => {
                         key={index}
                         onClick={() => setCurrentSlide(index)}
                         className={`transition-all duration-300 rounded-full ${index === currentSlide
-                                ? 'w-8 h-2 bg-primary shadow-[0_0_10px_rgba(46,139,87,0.8)]'
-                                : 'w-2 h-2 bg-white/50 hover:bg-white'
+                            ? 'w-8 h-2 bg-primary shadow-[0_0_10px_rgba(46,139,87,0.8)]'
+                            : 'w-2 h-2 bg-white/50 hover:bg-white'
                             }`}
                         aria-label={`Go to slide ${index + 1}`}
                     />
