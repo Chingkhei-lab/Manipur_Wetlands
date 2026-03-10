@@ -21,7 +21,9 @@ public partial class Wetland
 
     public string? ImageUrl { get; set; }
 
-    
+    public string? ImageUrl2 { get; set; }
+
+    public string? ImageUrl3 { get; set; }
 
     
 

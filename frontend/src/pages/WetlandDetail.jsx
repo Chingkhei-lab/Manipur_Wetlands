@@ -24,10 +24,14 @@ const WetlandDetail = () => {
             try {
                 const response = await axios.get(`http://localhost:5171/api/species/wetland/${id}`);
                 setData(response.data);
+                const img1 = response.data.wetlandImageUrl || '/assets/placeholder.jpg';
+                const img2 = response.data.wetlandImageUrl2 || `/assets/${id}_1.jpg`;
+                const img3 = response.data.wetlandImageUrl3 || `/assets/${id}_2.jpg`;
+
                 setArchiveImages([
-                    `${response.data.wetlandImageUrl || '/assets/placeholder.jpg'}`,
-                    `/assets/${id}_1.jpg`,
-                    `/assets/${id}_2.jpg`
+                    img1.startsWith('/') || img1.startsWith('http') ? img1 : `/${img1}`,
+                    img2.startsWith('/') || img2.startsWith('http') ? img2 : `/${img2}`,
+                    img3.startsWith('/') || img3.startsWith('http') ? img3 : `/${img3}`
                 ]);
                 setIsLoading(false);
             } catch (err) {
@@ -76,7 +80,7 @@ const WetlandDetail = () => {
                     <div
                         className="absolute inset-0 bg-cover bg-center object-cover"
                         style={{
-                            backgroundImage: `url('${data.wetlandImageUrl || '/assets/placeholder.jpg'}')`
+                            backgroundImage: `url('${(data.wetlandImageUrl && (data.wetlandImageUrl.startsWith('/') || data.wetlandImageUrl.startsWith('http'))) ? data.wetlandImageUrl : `/${data.wetlandImageUrl || 'assets/placeholder.jpg'}`}')`
                         }}
                     ></div>
                     {/* Glass Bar at Bottom */}

@@ -23,7 +23,7 @@ namespace backend.Controllers
         public async Task<ActionResult> GetWetlands()
         {
             var data = await _context.Wetlands
-                .Select(w => new { w.Id, w.Name, w.CommonId, w.Type, w.District, w.Description, w.ImageUrl, w.Latitude, w.Longitude, AreaSqKm = w.AreaHa })
+                .Select(w => new { w.Id, w.Name, w.CommonId, w.Type, w.District, w.Description, w.ImageUrl, w.ImageUrl2, w.ImageUrl3, w.Latitude, w.Longitude, AreaSqKm = w.AreaHa })
                 .ToListAsync();
             return Ok(data);
         }
@@ -32,7 +32,7 @@ namespace backend.Controllers
         public async Task<ActionResult> GetAnimals()
         {
             var data = await _context.Animals.Include(a => a.Wetlands)
-                .Select(a => new { a.Id, a.CommonName, a.CommonId, a.ScientificName, a.LocalName, a.Description, a.ImageUrl, a.IucnStatus, Wetlands = a.Wetlands.Select(w => new { w.Id, w.Name }) })
+                .Select(a => new { a.Id, a.CommonName, a.CommonId, a.ScientificName, a.LocalName, a.Description, a.ImageUrl, a.ImageUrl2, a.IucnStatus, Wetlands = a.Wetlands.Select(w => new { w.Id, w.Name }) })
                 .ToListAsync();
             return Ok(data);
         }
@@ -41,7 +41,7 @@ namespace backend.Controllers
         public async Task<ActionResult> GetBirds()
         {
             var data = await _context.Birds.Include(b => b.Wetlands)
-                .Select(b => new { b.Id, b.CommonName, b.CommonId, b.ScientificName, b.LocalName, b.Description, b.ImageUrl, b.Seasonality, Wetlands = b.Wetlands.Select(w => new { w.Id, w.Name }) })
+                .Select(b => new { b.Id, b.CommonName, b.CommonId, b.ScientificName, b.LocalName, b.Description, b.ImageUrl, b.ImageUrl2, b.Seasonality, Wetlands = b.Wetlands.Select(w => new { w.Id, w.Name }) })
                 .ToListAsync();
             return Ok(data);
         }
@@ -50,7 +50,7 @@ namespace backend.Controllers
         public async Task<ActionResult> GetFish()
         {
             var data = await _context.Fish.Include(f => f.Wetlands)
-                .Select(f => new { f.Id, f.CommonName, f.CommonId, f.ScientificName, f.LocalName, f.Description, f.ImageUrl, f.EconomicValue, Wetlands = f.Wetlands.Select(w => new { w.Id, w.Name }) })
+                .Select(f => new { f.Id, f.CommonName, f.CommonId, f.ScientificName, f.LocalName, f.Description, f.ImageUrl, f.ImageUrl2, f.EconomicValue, Wetlands = f.Wetlands.Select(w => new { w.Id, w.Name }) })
                 .ToListAsync();
             return Ok(data);
         }
@@ -59,7 +59,7 @@ namespace backend.Controllers
         public async Task<ActionResult> GetFlora()
         {
             var data = await _context.Floras.Include(f => f.Wetlands)
-                .Select(f => new { f.Id, f.CommonName, f.CommonId, f.ScientificName, f.LocalName, f.Description, f.ImageUrl, f.PlantType, Wetlands = f.Wetlands.Select(w => new { w.Id, w.Name }) })
+                .Select(f => new { f.Id, f.CommonName, f.CommonId, f.ScientificName, f.LocalName, f.Description, f.ImageUrl, f.ImageUrl2, f.PlantType, Wetlands = f.Wetlands.Select(w => new { w.Id, w.Name }) })
                 .ToListAsync();
             return Ok(data);
         }
@@ -68,7 +68,7 @@ namespace backend.Controllers
         public async Task<ActionResult> GetInsects()
         {
             var data = await _context.Insects.Include(i => i.Wetlands)
-                .Select(i => new { i.Id, i.CommonName, i.CommonId, i.ScientificName, i.LocalName, i.Description, i.ImageUrl, i.RoleInEcosystem, Wetlands = i.Wetlands.Select(w => new { w.Id, w.Name }) })
+                .Select(i => new { i.Id, i.CommonName, i.CommonId, i.ScientificName, i.LocalName, i.Description, i.ImageUrl, i.ImageUrl2, i.RoleInEcosystem, Wetlands = i.Wetlands.Select(w => new { w.Id, w.Name }) })
                 .ToListAsync();
             return Ok(data);
         }
@@ -86,6 +86,8 @@ namespace backend.Controllers
                 District = GetStringOrNull(body, "district"),
                 Description = GetStringOrNull(body, "description"),
                 ImageUrl = GetStringOrNull(body, "imageUrl"),
+                ImageUrl2 = GetStringOrNull(body, "imageUrl2"),
+                ImageUrl3 = GetStringOrNull(body, "imageUrl3"),
                 Latitude = GetDecimalOrNull(body, "latitude"),
                 Longitude = GetDecimalOrNull(body, "longitude"),
                 AreaHa = GetDecimalOrNull(body, "areaSqKm")
@@ -107,6 +109,7 @@ namespace backend.Controllers
                 LocalName = GetStringOrNull(d, "localName"),
                 Description = GetStringOrNull(d, "description"),
                 ImageUrl = GetStringOrNull(d, "imageUrl"),
+                ImageUrl2 = GetStringOrNull(d, "imageUrl2"),
                 IucnStatus = GetStringOrNull(d, "iucnStatus")
             };
             _context.Animals.Add(animal);
@@ -127,6 +130,7 @@ namespace backend.Controllers
                 LocalName = GetStringOrNull(d, "localName"),
                 Description = GetStringOrNull(d, "description"),
                 ImageUrl = GetStringOrNull(d, "imageUrl"),
+                ImageUrl2 = GetStringOrNull(d, "imageUrl2"),
                 Seasonality = GetStringOrNull(d, "seasonality")
             };
             _context.Birds.Add(bird);
@@ -147,6 +151,7 @@ namespace backend.Controllers
                 LocalName = GetStringOrNull(d, "localName"),
                 Description = GetStringOrNull(d, "description"),
                 ImageUrl = GetStringOrNull(d, "imageUrl"),
+                ImageUrl2 = GetStringOrNull(d, "imageUrl2"),
                 EconomicValue = GetStringOrNull(d, "economicValue")
             };
             _context.Fish.Add(fish);
@@ -167,6 +172,7 @@ namespace backend.Controllers
                 LocalName = GetStringOrNull(d, "localName"),
                 Description = GetStringOrNull(d, "description"),
                 ImageUrl = GetStringOrNull(d, "imageUrl"),
+                ImageUrl2 = GetStringOrNull(d, "imageUrl2"),
                 PlantType = GetStringOrNull(d, "plantType")
             };
             _context.Floras.Add(flora);
@@ -187,6 +193,7 @@ namespace backend.Controllers
                 LocalName = GetStringOrNull(d, "localName"),
                 Description = GetStringOrNull(d, "description"),
                 ImageUrl = GetStringOrNull(d, "imageUrl"),
+                ImageUrl2 = GetStringOrNull(d, "imageUrl2"),
                 RoleInEcosystem = GetStringOrNull(d, "roleInEcosystem")
             };
             _context.Insects.Add(insect);
@@ -208,6 +215,8 @@ namespace backend.Controllers
             wetland.District = GetStringOrNull(body, "district");
             wetland.Description = GetStringOrNull(body, "description");
             wetland.ImageUrl = GetStringOrNull(body, "imageUrl");
+            wetland.ImageUrl2 = GetStringOrNull(body, "imageUrl2");
+            wetland.ImageUrl3 = GetStringOrNull(body, "imageUrl3");
             wetland.Latitude = GetDecimalOrNull(body, "latitude");
             wetland.Longitude = GetDecimalOrNull(body, "longitude");
             wetland.AreaHa = GetDecimalOrNull(body, "areaSqKm");
@@ -227,6 +236,7 @@ namespace backend.Controllers
             animal.LocalName = GetStringOrNull(d, "localName");
             animal.Description = GetStringOrNull(d, "description");
             animal.ImageUrl = GetStringOrNull(d, "imageUrl");
+            animal.ImageUrl2 = GetStringOrNull(d, "imageUrl2");
             animal.IucnStatus = GetStringOrNull(d, "iucnStatus");
             await _context.SaveChangesAsync();
             await LinkWetlands("wetland_animals", "animal_id", id, request.WetlandIds);
@@ -245,6 +255,7 @@ namespace backend.Controllers
             bird.LocalName = GetStringOrNull(d, "localName");
             bird.Description = GetStringOrNull(d, "description");
             bird.ImageUrl = GetStringOrNull(d, "imageUrl");
+            bird.ImageUrl2 = GetStringOrNull(d, "imageUrl2");
             bird.Seasonality = GetStringOrNull(d, "seasonality");
             await _context.SaveChangesAsync();
             await LinkWetlands("wetland_birds", "bird_id", id, request.WetlandIds);
@@ -263,6 +274,7 @@ namespace backend.Controllers
             fish.LocalName = GetStringOrNull(d, "localName");
             fish.Description = GetStringOrNull(d, "description");
             fish.ImageUrl = GetStringOrNull(d, "imageUrl");
+            fish.ImageUrl2 = GetStringOrNull(d, "imageUrl2");
             fish.EconomicValue = GetStringOrNull(d, "economicValue");
             await _context.SaveChangesAsync();
             await LinkWetlands("wetland_fish", "fish_id", id, request.WetlandIds);
@@ -281,6 +293,7 @@ namespace backend.Controllers
             flora.LocalName = GetStringOrNull(d, "localName");
             flora.Description = GetStringOrNull(d, "description");
             flora.ImageUrl = GetStringOrNull(d, "imageUrl");
+            flora.ImageUrl2 = GetStringOrNull(d, "imageUrl2");
             flora.PlantType = GetStringOrNull(d, "plantType");
             await _context.SaveChangesAsync();
             await LinkWetlands("wetland_flora", "flora_id", id, request.WetlandIds);
@@ -299,6 +312,7 @@ namespace backend.Controllers
             insect.LocalName = GetStringOrNull(d, "localName");
             insect.Description = GetStringOrNull(d, "description");
             insect.ImageUrl = GetStringOrNull(d, "imageUrl");
+            insect.ImageUrl2 = GetStringOrNull(d, "imageUrl2");
             insect.RoleInEcosystem = GetStringOrNull(d, "roleInEcosystem");
             await _context.SaveChangesAsync();
             await LinkWetlands("wetland_insects", "insect_id", id, request.WetlandIds);

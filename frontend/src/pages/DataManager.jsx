@@ -15,7 +15,7 @@ const DataManager = () => {
     const [formData, setFormData] = useState({});
     const [error, setError] = useState(null);
     const [allWetlands, setAllWetlands] = useState([]);
-    const [isUploading, setIsUploading] = useState(false);
+    const [isUploading, setIsUploading] = useState(null);
 
     const tabs = [
         { id: 'wetlands', label: 'Wetlands', icon: 'water' },
@@ -77,6 +77,7 @@ const DataManager = () => {
             localName: '',
             description: '',
             imageUrl: '',
+            imageUrl2: '',
             wetlandIds: []
         };
 
@@ -89,6 +90,8 @@ const DataManager = () => {
                 longitude: 0,
                 description: '',
                 imageUrl: '',
+                imageUrl2: '',
+                imageUrl3: '',
                 commonId: '',
                 areaSqKm: 0
             };
@@ -124,7 +127,7 @@ const DataManager = () => {
         });
     };
 
-    const handleFileUpload = async (e) => {
+    const handleFileUpload = async (e, fieldName = 'imageUrl') => {
         const file = e.target.files[0];
         if (!file) return;
 
@@ -132,16 +135,16 @@ const DataManager = () => {
         uploadFormData.append('file', file);
 
         try {
-            setIsUploading(true);
+            setIsUploading(fieldName);
             const response = await axios.post('http://localhost:5171/api/Media/upload', uploadFormData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
-            setFormData(prev => ({ ...prev, imageUrl: response.data.imageUrl }));
+            setFormData(prev => ({ ...prev, [fieldName]: response.data.imageUrl }));
         } catch (err) {
             console.error("Upload failed:", err);
             alert("Image upload failed.");
         } finally {
-            setIsUploading(false);
+            setIsUploading(null);
         }
     };
 
@@ -535,22 +538,22 @@ const DataManager = () => {
                                     </div>
                                 )}
 
-                                {/* Image Upload */}
+                                {/* Image Upload 1 */}
                                 <div className="md:col-span-2">
-                                    <label className="block text-xs font-bold text-[#6a8174] uppercase mb-2">Species Photo</label>
+                                    <label className="block text-xs font-bold text-[#6a8174] uppercase mb-2">Main Photo (Image 1)</label>
                                     <div className="flex items-center gap-4">
                                         <div className="w-24 h-24 rounded-2xl bg-gray-50 border-2 border-dashed border-[#dde3e0] flex items-center justify-center overflow-hidden relative group">
                                             {formData.imageUrl ? (
                                                 <>
-                                                    <img src={formData.imageUrl.startsWith('/') ? formData.imageUrl : `/${formData.imageUrl}`} className="w-full h-full object-cover" alt="Preview" />
-                                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                    <img src={formData.imageUrl.startsWith('/') ? formData.imageUrl : `/${formData.imageUrl}`} className="w-full h-full object-cover" alt="Preview 1" />
+                                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
                                                         <span className="text-white text-[10px] font-bold">Replace</span>
                                                     </div>
                                                 </>
                                             ) : (
                                                 <span className="material-symbols-outlined text-[#6a8174]/40 text-3xl">add_photo_alternate</span>
                                             )}
-                                            {isUploading && (
+                                            {isUploading === 'imageUrl' && (
                                                 <div className="absolute inset-0 bg-white/80 flex items-center justify-center">
                                                     <div className="w-6 h-6 border-2 border-[#107060] border-t-transparent rounded-full animate-spin"></div>
                                                 </div>
@@ -559,22 +562,104 @@ const DataManager = () => {
                                         <div className="flex-grow">
                                             <input
                                                 type="file"
-                                                id="image-upload"
+                                                id="image-upload-1"
                                                 className="hidden"
                                                 accept="image/*"
-                                                onChange={handleFileUpload}
+                                                onChange={(e) => handleFileUpload(e, 'imageUrl')}
                                             />
                                             <label
-                                                htmlFor="image-upload"
+                                                htmlFor="image-upload-1"
                                                 className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-[#dde3e0] hover:border-[#107060] hover:text-[#107060] rounded-xl text-xs font-bold transition-all cursor-pointer shadow-sm"
                                             >
                                                 <span className="material-symbols-outlined text-sm">upload</span>
-                                                {formData.imageUrl ? 'Change Photo' : 'Upload Desktop Photo'}
+                                                {formData.imageUrl ? 'Change Photo 1' : 'Upload Desktop Photo'}
                                             </label>
                                             <p className="text-[10px] text-[#6a8174] mt-2 font-medium">PNG, JPG or WebP (Max 5MB). Photo will be saved to assets automatically.</p>
                                         </div>
                                     </div>
                                 </div>
+
+                                {/* Image Upload 2 */}
+                                <div className="md:col-span-2">
+                                    <label className="block text-xs font-bold text-[#6a8174] uppercase mb-2">Secondary Photo (Image 2)</label>
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-24 h-24 rounded-2xl bg-gray-50 border-2 border-dashed border-[#dde3e0] flex items-center justify-center overflow-hidden relative group">
+                                            {formData.imageUrl2 ? (
+                                                <>
+                                                    <img src={formData.imageUrl2.startsWith('/') ? formData.imageUrl2 : `/${formData.imageUrl2}`} className="w-full h-full object-cover" alt="Preview 2" />
+                                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                                                        <span className="text-white text-[10px] font-bold">Replace</span>
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <span className="material-symbols-outlined text-[#6a8174]/40 text-3xl">add_photo_alternate</span>
+                                            )}
+                                            {isUploading === 'imageUrl2' && (
+                                                <div className="absolute inset-0 bg-white/80 flex items-center justify-center">
+                                                    <div className="w-6 h-6 border-2 border-[#107060] border-t-transparent rounded-full animate-spin"></div>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="flex-grow">
+                                            <input
+                                                type="file"
+                                                id="image-upload-2"
+                                                className="hidden"
+                                                accept="image/*"
+                                                onChange={(e) => handleFileUpload(e, 'imageUrl2')}
+                                            />
+                                            <label
+                                                htmlFor="image-upload-2"
+                                                className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-[#dde3e0] hover:border-[#107060] hover:text-[#107060] rounded-xl text-xs font-bold transition-all cursor-pointer shadow-sm"
+                                            >
+                                                <span className="material-symbols-outlined text-sm">upload</span>
+                                                {formData.imageUrl2 ? 'Change Photo 2' : 'Upload Second Photo'}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Image Upload 3 (Wetlands Only) */}
+                                {activeTab === 'wetlands' && (
+                                    <div className="md:col-span-2">
+                                        <label className="block text-xs font-bold text-[#6a8174] uppercase mb-2">Third Photo (Optional)</label>
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-24 h-24 rounded-2xl bg-gray-50 border-2 border-dashed border-[#dde3e0] flex items-center justify-center overflow-hidden relative group">
+                                                {formData.imageUrl3 ? (
+                                                    <>
+                                                        <img src={formData.imageUrl3.startsWith('/') ? formData.imageUrl3 : `/${formData.imageUrl3}`} className="w-full h-full object-cover" alt="Preview 3" />
+                                                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                                                            <span className="text-white text-[10px] font-bold">Replace</span>
+                                                        </div>
+                                                    </>
+                                                ) : (
+                                                    <span className="material-symbols-outlined text-[#6a8174]/40 text-3xl">add_photo_alternate</span>
+                                                )}
+                                                {isUploading === 'imageUrl3' && (
+                                                    <div className="absolute inset-0 bg-white/80 flex items-center justify-center">
+                                                        <div className="w-6 h-6 border-2 border-[#107060] border-t-transparent rounded-full animate-spin"></div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="flex-grow">
+                                                <input
+                                                    type="file"
+                                                    id="image-upload-3"
+                                                    className="hidden"
+                                                    accept="image/*"
+                                                    onChange={(e) => handleFileUpload(e, 'imageUrl3')}
+                                                />
+                                                <label
+                                                    htmlFor="image-upload-3"
+                                                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-[#dde3e0] hover:border-[#107060] hover:text-[#107060] rounded-xl text-xs font-bold transition-all cursor-pointer shadow-sm"
+                                                >
+                                                    <span className="material-symbols-outlined text-sm">upload</span>
+                                                    {formData.imageUrl3 ? 'Change Photo 3' : 'Upload Third Photo (Optional)'}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
 
                                 {/* Habitat Selection (Only for Species) */}
                                 {activeTab !== 'wetlands' && (

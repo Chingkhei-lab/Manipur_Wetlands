@@ -44,6 +44,8 @@ namespace backend.Controllers
                 wetlandType = wetland.Type,
                 wetlandDistrict = wetland.District,
                 wetlandImageUrl = wetland.ImageUrl,
+                wetlandImageUrl2 = wetland.ImageUrl2,
+                wetlandImageUrl3 = wetland.ImageUrl3,
                 wetlandAreaSqKm = wetland.AreaHa, // Using AreaHa as SqKm for display compatibility
                 species = new
                 {

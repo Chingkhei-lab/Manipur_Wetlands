@@ -17,7 +17,7 @@ public partial class Animal
 
     public string? ImageUrl { get; set; }
 
-    
+    public string? ImageUrl2 { get; set; }
 
     public string? IucnStatus { get; set; }
 

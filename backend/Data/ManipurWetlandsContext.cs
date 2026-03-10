@@ -52,6 +52,7 @@ public partial class ManipurWetlandsContext : DbContext
             entity.Property(e => e.ImageUrl)
                 .HasMaxLength(255)
                 .HasColumnName("image_url");
+            entity.Property(e => e.ImageUrl2).HasMaxLength(255).HasColumnName("image_url_2");
             entity.Property(e => e.IucnStatus)
                 .HasMaxLength(50)
                 .HasColumnName("iucn_status");
@@ -110,6 +111,7 @@ public partial class ManipurWetlandsContext : DbContext
             entity.Property(e => e.ImageUrl)
                 .HasMaxLength(255)
                 .HasColumnName("image_url");
+            entity.Property(e => e.ImageUrl2).HasMaxLength(255).HasColumnName("image_url_2");
             entity.Property(e => e.LocalName)
                 .HasMaxLength(255)
                 .HasColumnName("local_name");
@@ -190,6 +192,8 @@ public partial class ManipurWetlandsContext : DbContext
             entity.Property(e => e.ImageUrl)
                 .HasMaxLength(255)
                 .HasColumnName("image_url");
+            entity.Property(e => e.ImageUrl2).HasMaxLength(255).HasColumnName("image_url_2");
+            entity.Property(e => e.ImageUrl3).HasMaxLength(255).HasColumnName("image_url_3");
             entity.Property(e => e.Latitude)
                 .HasPrecision(10, 6)
                 .HasColumnName("latitude");

@@ -70,13 +70,25 @@ const SpeciesDetail = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
                         {/* Image Side */}
-                        <div className="rounded-2xl overflow-hidden shadow-md md:shadow-xl border border-[#dde3e0] dark:border-primary/20 aspect-video md:aspect-square w-full">
-                            <img
-                                src={`${species.imageUrl || '/assets/placeholder.jpg'}`}
-                                alt={species.commonName}
-                                className="w-full h-full object-cover"
-                                onError={(e) => { e.target.onerror = null; e.target.src = '/assets/placeholder.jpg'; }}
-                            />
+                        <div className="flex flex-col gap-4 w-full">
+                            <div className="rounded-2xl overflow-hidden shadow-md md:shadow-xl border border-[#dde3e0] dark:border-primary/20 aspect-video md:aspect-square w-full">
+                                <img
+                                    src={`${species.imageUrl && (species.imageUrl.startsWith('/') || species.imageUrl.startsWith('http')) ? species.imageUrl : `/${species.imageUrl || 'assets/placeholder.jpg'}`}`}
+                                    alt={species.commonName}
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => { e.target.onerror = null; e.target.src = '/assets/placeholder.jpg'; }}
+                                />
+                            </div>
+                            {species.imageUrl2 && (
+                                <div className="rounded-2xl overflow-hidden shadow-md md:shadow-xl border border-[#dde3e0] dark:border-primary/20 aspect-video md:aspect-square w-full">
+                                    <img
+                                        src={`${species.imageUrl2.startsWith('/') || species.imageUrl2.startsWith('http') ? species.imageUrl2 : `/${species.imageUrl2}`}`}
+                                        alt={`${species.commonName} Secondary`}
+                                        className="w-full h-full object-cover"
+                                        onError={(e) => { e.currentTarget.parentElement.style.display = 'none'; }}
+                                    />
+                                </div>
+                            )}
                         </div>
 
                         {/* Content Side */}
