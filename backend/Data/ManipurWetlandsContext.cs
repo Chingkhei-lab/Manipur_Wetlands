@@ -91,6 +91,7 @@ public partial class ManipurWetlandsContext : DbContext
                 .HasColumnName("seasonality");
             entity.Property(e => e.TaxonomyGroup).HasMaxLength(100).HasColumnName("taxonomy_group");
             entity.Property(e => e.ImageUrl2).HasMaxLength(255).HasColumnName("image_url_2");
+            entity.Property(e => e.IucnStatus).HasMaxLength(50).HasColumnName("iucn_status");
             entity.Property(e => e.CommonId).HasMaxLength(50).HasColumnName("common_id");
         });
 
@@ -119,6 +120,7 @@ public partial class ManipurWetlandsContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("scientific_name");
             entity.Property(e => e.TaxonomyGroup).HasMaxLength(100).HasColumnName("taxonomy_group");
+            entity.Property(e => e.IucnStatus).HasMaxLength(50).HasColumnName("iucn_status");
             entity.Property(e => e.CommonId).HasMaxLength(50).HasColumnName("common_id");
         });
 
@@ -147,6 +149,7 @@ public partial class ManipurWetlandsContext : DbContext
                 .HasColumnName("scientific_name");
             entity.Property(e => e.TaxonomyGroup).HasMaxLength(100).HasColumnName("taxonomy_group");
             entity.Property(e => e.ImageUrl2).HasMaxLength(255).HasColumnName("image_url_2");
+            entity.Property(e => e.IucnStatus).HasMaxLength(50).HasColumnName("iucn_status");
             entity.Property(e => e.CommonId).HasMaxLength(50).HasColumnName("common_id");
         });
 
@@ -175,6 +178,7 @@ public partial class ManipurWetlandsContext : DbContext
                 .HasColumnName("scientific_name");
             entity.Property(e => e.TaxonomyGroup).HasMaxLength(100).HasColumnName("taxonomy_group");
             entity.Property(e => e.ImageUrl2).HasMaxLength(255).HasColumnName("image_url_2");
+            entity.Property(e => e.IucnStatus).HasMaxLength(50).HasColumnName("iucn_status");
             entity.Property(e => e.CommonId).HasMaxLength(50).HasColumnName("common_id");
         });
 

@@ -50,9 +50,13 @@ using (var scope = app.Services.CreateScope())
     {
         _context.Database.ExecuteSqlRaw("ALTER TABLE animals ADD COLUMN IF NOT EXISTS image_url_2 VARCHAR(255);");
         _context.Database.ExecuteSqlRaw("ALTER TABLE birds ADD COLUMN IF NOT EXISTS image_url_2 VARCHAR(255);");
+        _context.Database.ExecuteSqlRaw("ALTER TABLE birds ADD COLUMN IF NOT EXISTS iucn_status VARCHAR(50);");
         _context.Database.ExecuteSqlRaw("ALTER TABLE fish ADD COLUMN IF NOT EXISTS image_url_2 VARCHAR(255);");
+        _context.Database.ExecuteSqlRaw("ALTER TABLE fish ADD COLUMN IF NOT EXISTS iucn_status VARCHAR(50);");
         _context.Database.ExecuteSqlRaw("ALTER TABLE floras ADD COLUMN IF NOT EXISTS image_url_2 VARCHAR(255);");
+        _context.Database.ExecuteSqlRaw("ALTER TABLE floras ADD COLUMN IF NOT EXISTS iucn_status VARCHAR(50);");
         _context.Database.ExecuteSqlRaw("ALTER TABLE insects ADD COLUMN IF NOT EXISTS image_url_2 VARCHAR(255);");
+        _context.Database.ExecuteSqlRaw("ALTER TABLE insects ADD COLUMN IF NOT EXISTS iucn_status VARCHAR(50);");
         _context.Database.ExecuteSqlRaw("ALTER TABLE wetlands ADD COLUMN IF NOT EXISTS image_url_2 VARCHAR(255);");
         _context.Database.ExecuteSqlRaw("ALTER TABLE wetlands ADD COLUMN IF NOT EXISTS image_url_3 VARCHAR(255);");
     }

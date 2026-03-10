@@ -78,6 +78,7 @@ const DataManager = () => {
             description: '',
             imageUrl: '',
             imageUrl2: '',
+            iucnStatus: '',
             wetlandIds: []
         };
 
@@ -96,7 +97,7 @@ const DataManager = () => {
                 areaSqKm: 0
             };
         } else if (activeTab === 'animals') {
-            return { ...base, iucnStatus: '' };
+            return { ...base };
         } else if (activeTab === 'birds') {
             return { ...base, seasonality: '' };
         } else if (activeTab === 'fish') {
@@ -422,6 +423,26 @@ const DataManager = () => {
                                                 className="w-full px-4 py-3 rounded-xl border border-[#dde3e0] focus:border-[#107060] focus:ring-1 focus:ring-[#107060] outline-none transition-all"
                                             />
                                         </div>
+                                        <div>
+                                            <label className="block text-xs font-bold text-[#6a8174] uppercase mb-2">IUCN Status</label>
+                                            <select
+                                                name="iucnStatus"
+                                                value={formData.iucnStatus || ''}
+                                                onChange={handleInputChange}
+                                                className="w-full px-4 py-3 rounded-xl border border-[#dde3e0] focus:border-[#107060] focus:ring-1 focus:ring-[#107060] outline-none transition-all bg-white"
+                                            >
+                                                <option value="">Select Status (Optional)</option>
+                                                <option value="Not Evaluated">Not Evaluated (NE)</option>
+                                                <option value="Data Deficient">Data Deficient (DD)</option>
+                                                <option value="Least Concern">Least Concern (LC)</option>
+                                                <option value="Near Threatened">Near Threatened (NT)</option>
+                                                <option value="Vulnerable">Vulnerable (VU)</option>
+                                                <option value="Endangered">Endangered (EN)</option>
+                                                <option value="Critically Endangered">Critically Endangered (CR)</option>
+                                                <option value="Extinct in the Wild">Extinct in the Wild (EW)</option>
+                                                <option value="Extinct">Extinct (EX)</option>
+                                            </select>
+                                        </div>
                                     </>
                                 )}
 
@@ -494,18 +515,6 @@ const DataManager = () => {
                                 )}
 
                                 {/* Specific fields */}
-                                {activeTab === 'animals' && (
-                                    <div>
-                                        <label className="block text-xs font-bold text-[#6a8174] uppercase mb-2">IUCN Status</label>
-                                        <input
-                                            type="text"
-                                            name="iucnStatus"
-                                            value={formData.iucnStatus || ''}
-                                            onChange={handleInputChange}
-                                            className="w-full px-4 py-3 rounded-xl border border-[#dde3e0] focus:border-[#107060] focus:ring-1 focus:ring-[#107060] outline-none transition-all"
-                                        />
-                                    </div>
-                                )}
                                 {activeTab === 'birds' && (
                                     <div>
                                         <label className="block text-xs font-bold text-[#6a8174] uppercase mb-2">Seasonality</label>

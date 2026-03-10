@@ -26,6 +26,8 @@ public partial class Insect
     public string? TaxonomyGroup { get; set; }
 
         public string? ImageUrl2 { get; set; }
+        
+        public string? IucnStatus { get; set; }
 
 public virtual ICollection<Wetland> Wetlands { get; set; } = new List<Wetland>();
 }

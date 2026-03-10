@@ -24,6 +24,8 @@ public partial class Fish
     public string? CommonId { get; set; }
 
         public string? TaxonomyGroup { get; set; }
+        
+        public string? IucnStatus { get; set; }
 
 public virtual ICollection<Wetland> Wetlands { get; set; } = new List<Wetland>();
 }
