@@ -49,3 +49,11 @@ __pycache__/
 temp/
 tmp/
 temp_images/
+
+# Uploads
+frontend/public/assets/uploads/
+
+# Settings
+backend/appsettings.json
+backend/appsettings.*.json
+!backend/appsettings.Example.json
