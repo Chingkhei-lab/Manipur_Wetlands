@@ -2,7 +2,7 @@
   <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
   <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
   <img src="https://img.shields.io/badge/C%23-.NET_9-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt="C#" />
-  <img src="https://img.shields.io/badge/MySQL-00000F?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL" />
+  <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
   
   <br />
   
@@ -26,28 +26,30 @@ The **Manipur Wetlands Biodiversity Archive** is a high-performance, responsive 
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Post-Clone Instructions (Getting Started)
 
-To run this application locally on your machine, you must configure both the **C# Backend** and the **Vite + React Frontend**.
+Because the project includes sensitive settings and dynamic file paths, some specific configuration files are explicitly ignored in Git. **Please follow these exact steps after cloning the repository to your computer.**
 
 ### ✅ Prerequisites
 Before you begin, ensure you have the following installed on your machine:
 1. **Node.js**: (v18.0 or newer)
 2. **.NET 9 SDK**: For building and running the backend API.
-3. **MySQL Server**: The database engine is strictly required (See *Database Configuration* below).
+3. **PostgreSQL**: The database engine is strictly required (See *Database Configuration* below).
 
-### 🛠️ 1. Database Configuration (MySQL Required)
-> **⚠️ Question: Can I run this without MySQL?**
-> **No.** The backend relies explicitly on Entity Framework Core's MySQL provider (`Pomelo.EntityFrameworkCore.MySql`). Without a running MySQL instance, the backend API will crash on launch, which will silently break the React Frontend.
+### 🛠️ 1. Database Configuration (PostgreSQL Required)
+> **⚠️ Question: Can I run this without PostgreSQL?**
+> **No.** The backend relies explicitly on Entity Framework Core's Npgsql provider (`Npgsql.EntityFrameworkCore.PostgreSQL`). Without a running Postgres instance, the backend API will crash on launch, which will silently break the React Frontend.
 
-1. Open MySQL Workbench or your terminal and create a database named `manipur_wetlands`:
+1. Open pgAdmin or your terminal and create a database named `manipur_wetlands`:
    ```sql
    CREATE DATABASE manipur_wetlands;
    ```
-2. Navigate to `backend/appsettings.json` and ensure the `ConnectionStrings` section matches your local root password:
+2. The `backend/appsettings.json` file is ignored by Git to keep your passwords secure. You must recreate it! 
+3. Go to the `backend/` folder. Copy the `appsettings.Example.json` file and rename the copy to `appsettings.json`.
+4. Open your new `appsettings.json` and configure it to match your local PostgreSQL root username and password.
    ```json
    "ConnectionStrings": {
-     "DefaultConnection": "Server=localhost;Database=manipur_wetlands;User=root;Password=YOUR_LOCAL_PASSWORD;"
+     "DefaultConnection": "Host=localhost;Database=manipur_wetlands;Username=postgres;Password=YOUR_LOCAL_PASSWORD"
    }
    ```
 
@@ -61,16 +63,16 @@ The C# backend uses Entity Framework to automatically create its own tables and 
    dotnet build
    dotnet run
    ```
-3. The server should start cleanly on `http://localhost:5171`. (Keep this terminal running).
+3. The server should start cleanly on `http://localhost:5171`. **(Keep this terminal running)**.
 
 ### 🎨 3. Starting the Frontend (React UI)
 1. Open a *second* terminal and navigate to the `frontend/` directory.
-2. Install the rigid dependency tree (React, Vite, Axios, React-Leaflet, Tailwind):
+2. Install the necessary dependencies (React, Vite, Axios, React-Leaflet, Tailwind):
    ```bash
    cd frontend
    npm install
    ```
-3. Launch the hot-reloading development server:
+3. Launch the development server:
    ```bash
    npm run dev
    ```
