@@ -238,6 +238,14 @@ const DataManager = () => {
                 </div>
 
                 {/* Content Table */}
+                <div className="flex items-center justify-between mb-4 px-1">
+                    <h2 className="text-lg font-bold text-[#107060] capitalize">
+                        {activeTab} Database
+                    </h2>
+                    <span className="bg-[#107060]/10 text-[#107060] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border border-[#107060]/20">
+                        Total Records: {data.length}
+                    </span>
+                </div>
                 <div className="bg-white shadow-[0_4px_20px_rgba(0,0,0,0.05)] rounded-2xl border border-[#dde3e0] overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left text-sm">
@@ -245,7 +253,7 @@ const DataManager = () => {
                                 <tr>
                                     <th className="px-6 py-4">Name / ID</th>
                                     <th className="px-6 py-4">Image</th>
-                                    <th className="px-6 py-4">{activeTab === 'wetlands' ? 'District' : 'Found In (Wetlands)'}</th>
+                                    <th className="px-6 py-4">{activeTab === 'wetlands' ? 'Type & District' : 'Found In'}</th>
                                     <th className="px-6 py-4">Details</th>
                                     <th className="px-6 py-4 text-right">Actions</th>
                                 </tr>
@@ -302,7 +310,17 @@ const DataManager = () => {
                                             </td>
                                             <td className="px-6 py-6 border-b border-[#dde3e0]">
                                                 {activeTab === 'wetlands' ? (
-                                                    <span className="text-[#6a8174] font-medium">{item.district}</span>
+                                                    <div className="flex flex-col gap-2">
+                                                        <span className="text-[#121614] font-bold flex items-center gap-1">
+                                                            <span className="material-symbols-outlined text-[#107060] text-sm">location_on</span>
+                                                            {item.district || 'Unspecified'}
+                                                        </span>
+                                                        {item.type && (
+                                                            <span className="px-2 py-1 bg-[#107060]/10 text-[#107060] text-[10px] font-bold rounded-lg border border-[#107060]/20 w-max uppercase tracking-wider">
+                                                                {item.type}
+                                                            </span>
+                                                        )}
+                                                    </div>
                                                 ) : (
                                                     <div className="flex flex-wrap gap-1.5 max-w-[200px]">
                                                         {item.wetlands?.length > 0 ? (
@@ -367,18 +385,7 @@ const DataManager = () => {
 
                         <form onSubmit={handleSubmit} className="p-8 space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {/* Common ID */}
-                                <div>
-                                    <label className="block text-xs font-bold text-[#6a8174] uppercase mb-2">Common ID (e.g., WL-001)</label>
-                                    <input
-                                        type="text"
-                                        name="commonId"
-                                        value={formData.commonId || ''}
-                                        onChange={handleInputChange}
-                                        className="w-full px-4 py-3 rounded-xl border border-[#dde3e0] focus:border-[#107060] focus:ring-1 focus:ring-[#107060] outline-none transition-all"
-                                        required
-                                    />
-                                </div>
+                                {/* Common ID Removed as per request */}
 
                                 {/* Name */}
                                 <div>
@@ -422,13 +429,23 @@ const DataManager = () => {
                                     <>
                                         <div>
                                             <label className="block text-xs font-bold text-[#6a8174] uppercase mb-2">Type</label>
-                                            <input
-                                                type="text"
+                                            <select
                                                 name="type"
                                                 value={formData.type || ''}
                                                 onChange={handleInputChange}
-                                                className="w-full px-4 py-3 rounded-xl border border-[#dde3e0] focus:border-[#107060] focus:ring-1 focus:ring-[#107060] outline-none transition-all"
-                                            />
+                                                className="w-full px-4 py-3 rounded-xl border border-[#dde3e0] focus:border-[#107060] focus:ring-1 focus:ring-[#107060] outline-none transition-all bg-white"
+                                            >
+                                                <option value="">Select a Type</option>
+                                                <option value="Lake">Lake</option>
+                                                <option value="Pond">Pond</option>
+                                                <option value="Marsh">Marsh</option>
+                                                <option value="Swamp">Swamp</option>
+                                                <option value="River">River</option>
+                                                <option value="Reservoir">Reservoir</option>
+                                                <option value="Bog">Bog</option>
+                                                <option value="Fen">Fen</option>
+                                                <option value="Other">Other</option>
+                                            </select>
                                         </div>
                                         <div>
                                             <label className="block text-xs font-bold text-[#6a8174] uppercase mb-2">District</label>
