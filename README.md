@@ -44,9 +44,18 @@ Before you begin, ensure you have the following installed on your machine:
    ```sql
    CREATE DATABASE manipur_wetlands;
    ```
-2. The `backend/appsettings.json` file is ignored by Git to keep your passwords secure. You must recreate it! 
-3. Go to the `backend/` folder. Copy the `appsettings.Example.json` file and rename the copy to `appsettings.json`.
-4. Open your new `appsettings.json` and configure it to match your local PostgreSQL root username and password.
+2. Run the schema script to create all tables:
+   ```bash
+   psql -U postgres -d manipur_wetlands -f database_reference_schema.sql
+   ```
+3. **Seed the database** with all 288 species/wetland records and their associations:
+   ```bash
+   psql -U postgres -d manipur_wetlands -f seed_data.sql
+   ```
+   > Without this step, the catalog will be empty!
+4. The `backend/appsettings.json` file is ignored by Git to keep your passwords secure. You must recreate it! 
+5. Go to the `backend/` folder. Copy the `appsettings.Example.json` file and rename the copy to `appsettings.json`.
+6. Open your new `appsettings.json` and configure it to match your local PostgreSQL root username and password.
    ```json
    "ConnectionStrings": {
      "DefaultConnection": "Host=localhost;Database=manipur_wetlands;Username=postgres;Password=YOUR_LOCAL_PASSWORD"
@@ -54,7 +63,7 @@ Before you begin, ensure you have the following installed on your machine:
    ```
 
 ### ⚙️ 2. Starting the Backend (API & Database Sync)
-The C# backend uses Entity Framework to automatically create its own tables and populate the wetlands database with thousands of species records the first time you run it.
+The C# backend uses Entity Framework to connect to the database tables you created in the previous step.
 
 1. Open a new terminal and navigate to the `backend/` directory.
 2. Build and run the project:
@@ -84,6 +93,8 @@ The C# backend uses Entity Framework to automatically create its own tables and 
 
 ```plaintext
 /manipur_wetlands_project
+├── database_reference_schema.sql  # SQL schema (tables & relationships)
+├── seed_data.sql                  # All 288 catalog items + junction table data
 ├── backend/                       # C# .NET 9 Web API
 │   ├── Controllers/               # Handling HTTP GET requests
 │   ├── Data/                      # Entity Framework DB Context & Data Seeding
