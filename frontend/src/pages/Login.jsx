@@ -18,31 +18,28 @@ const Login = () => {
         e.preventDefault();
         setError('');
 
-        if (activeTab === 'admin') {
-            if (email === 'marphisinam123@gmail.com' && password === 'Mark123456') {
-                login({ role: 'admin', email: email, name: 'Admin User' });
-                navigate('/');
+        try {
+            setIsLoading(true);
+            const response = await axios.post('http://localhost:5171/api/managers/login', {
+                email,
+                password
+            });
+
+            if (!response.data?.token) {
+                setError('No authentication token was returned by the server.');
+                return;
+            }
+
+            login(response.data.user, response.data.token);
+            navigate('/');
+        } catch (err) {
+            if (err.response) {
+                setError(err.response.data.message || 'Login failed.');
             } else {
-                setError('Invalid admin credentials. Please try again.');
+                setError('Unable to connect to server. Please ensure backend is running.');
             }
-        } else {
-            try {
-                setIsLoading(true);
-                const response = await axios.post('http://localhost:5171/api/managers/login', {
-                    email,
-                    password
-                });
-                login(response.data.user);
-                navigate('/');
-            } catch (err) {
-                if (err.response) {
-                    setError(err.response.data.message || 'Login failed.');
-                } else {
-                    setError('Unable to connect to server. Please ensure backend is running.');
-                }
-            } finally {
-                setIsLoading(false);
-            }
+        } finally {
+            setIsLoading(false);
         }
     };
 

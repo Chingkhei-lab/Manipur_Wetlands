@@ -1,6 +1,6 @@
 -- 0. Clear old tables (if starting fresh)
 DROP TABLE IF EXISTS wetland_animals, wetland_birds, wetland_fish, wetland_flora, wetland_insects CASCADE;
-DROP TABLE IF EXISTS wetlands, birds, animals, fish, flora, insects CASCADE;
+DROP TABLE IF EXISTS wetlands, birds, animals, fish, flora, insects, managers CASCADE;
 
 -- 1. Wetlands Table (The Hub)
 CREATE TABLE wetlands (
@@ -86,6 +86,17 @@ CREATE TABLE fish (
     taxonomy_group VARCHAR(100),
     iucn_status VARCHAR(50),
     economic_value VARCHAR(100)
+);
+
+-- 2b. Managers Table
+CREATE TABLE managers (
+    id SERIAL PRIMARY KEY,
+    full_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    registration_code VARCHAR(50),
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW()
 );
 
 -- 3. Junction Tables (The Links)

@@ -26,66 +26,63 @@ The **Manipur Wetlands Biodiversity Archive** is a high-performance, responsive 
 
 ---
 
-## 🚀 Post-Clone Instructions (Getting Started)
+## 📋 Local Development Setup Guide
 
-Because the project includes sensitive settings and dynamic file paths, some specific configuration files are explicitly ignored in Git. **Please follow these exact steps after cloning the repository to your computer.**
+Follow these steps to get a full local copy of the Manipur Wetlands application running, complete with the database schema, seeded data, and local authentication secrets.
 
-### ✅ Prerequisites
-Before you begin, ensure you have the following installed on your machine:
-1. **Node.js**: (v18.0 or newer)
-2. **.NET 9 SDK**: For building and running the backend API.
-3. **PostgreSQL**: The database engine is strictly required (See *Database Configuration* below).
+### 1. Prerequisites
+Before cloning, ensure you have the following installed on your machine:
+* **PostgreSQL & pgAdmin 4** (For the database)
+* **.NET 8.0 SDK** (For the backend API)
+* **Node.js (v18+) & npm** (For the frontend React app)
+* **Python 3.x** (To run the database seeding scripts)
 
-### 🛠️ 1. Database Configuration (PostgreSQL Required)
-> **⚠️ Question: Can I run this without PostgreSQL?**
-> **No.** The backend relies explicitly on Entity Framework Core's Npgsql provider (`Npgsql.EntityFrameworkCore.PostgreSQL`). Without a running Postgres instance, the backend API will crash on launch, which will silently break the React Frontend.
+### 2. Clone the Repository
+```bash
+git clone [YOUR_GITHUB_REPO_URL_HERE]
+cd manipur_wetlands_project
+```
 
-1. Open pgAdmin or your terminal and create a database named `manipur_wetlands`:
-   ```sql
-   CREATE DATABASE manipur_wetlands;
-   ```
-2. Run the schema script to create all tables:
+### 3. Database Setup (The Data)
+Because the database engine runs locally on your machine, you must build the tables and inject the data yourself using the provided scripts.
+1. Open **pgAdmin**.
+2. Create a brand new database named `manipur_wetlands`.
+3. Open the Query Tool and run the `database_reference_schema.sql` file from the project root to create all the empty tables.
+4. Open the Query Tool again and run `seed_data.sql` to import the species data.
+5. Finally, open a terminal in the project root and run the Python wetlands seeder to convert map coordinates and insert the lakes:
    ```bash
-   psql -U postgres -d manipur_wetlands -f database_reference_schema.sql
-   ```
-3. **Seed the database** with all 288 species/wetland records and their associations:
-   ```bash
-   psql -U postgres -d manipur_wetlands -f seed_data.sql
-   ```
-   > Without this step, the catalog will be empty!
-4. The `backend/appsettings.json` file is ignored by Git to keep your passwords secure. You must recreate it! 
-5. Go to the `backend/` folder. Copy the `appsettings.Example.json` file and rename the copy to `appsettings.json`.
-6. Open your new `appsettings.json` and configure it to match your local PostgreSQL root username and password.
-   ```json
-   "ConnectionStrings": {
-     "DefaultConnection": "Host=localhost;Database=manipur_wetlands;Username=postgres;Password=YOUR_LOCAL_PASSWORD"
-   }
+   python seed_wetlands.py
    ```
 
-### ⚙️ 2. Starting the Backend (API & Database Sync)
-The C# backend uses Entity Framework to connect to the database tables you created in the previous step.
+### 4. Backend Configuration (User Secrets)
+We use .NET User Secrets to keep passwords off GitHub. You must configure your local backend to connect to your local PostgreSQL database and set up your admin login.
+Open a terminal in the `backend` folder and run these commands (replace the placeholder values with your own):
 
-1. Open a new terminal and navigate to the `backend/` directory.
-2. Build and run the project:
-   ```bash
-   cd backend
-   dotnet build
-   dotnet run
-   ```
-3. The server should start cleanly on `http://localhost:5171`. **(Keep this terminal running)**.
+```bash
+dotnet user-secrets init
 
-### 🎨 3. Starting the Frontend (React UI)
-1. Open a *second* terminal and navigate to the `frontend/` directory.
-2. Install the necessary dependencies (React, Vite, Axios, React-Leaflet, Tailwind):
-   ```bash
-   cd frontend
-   npm install
-   ```
-3. Launch the development server:
-   ```bash
-   npm run dev
-   ```
-4. Access the platform in your browser at: **`http://localhost:5173`**
+# 1. Database Connection (Replace YOUR_PGADMIN_PASSWORD)
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Database=manipur_wetlands;Username=postgres;Password=YOUR_PGADMIN_PASSWORD"
+
+# 2. JWT Security Key (Keep this as-is, or make your own 32+ char string)
+dotnet user-secrets set "Jwt:Key" "ThisIsASuperSecretKeyThatNeedsToBeAtLeast32CharactersLong2026!"
+
+# 3. Local Admin Login (Set your own test email/password)
+dotnet user-secrets set "AdminAuth:Email" "admin@local.com"
+dotnet user-secrets set "AdminAuth:Password" "TestAdmin123!"
+```
+
+### 5. Frontend Configuration
+Open a terminal in the `frontend` folder and set up your environment variables:
+1. Duplicate the `.env.example` file and rename it to `.env.local`.
+2. Run `npm install` to download the required Node packages.
+
+### 6. Run the Application
+You need two terminals open to run both halves of the app.
+* **Terminal 1 (Backend):** `cd backend` -> run `dotnet run`
+* **Terminal 2 (Frontend):** `cd frontend` -> run `npm run dev`
+
+Open `http://localhost:5173` in your browser. You can now log into the Admin portal using the email and password you set in Step 4!
 
 ---
 

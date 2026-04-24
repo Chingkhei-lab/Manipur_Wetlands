@@ -110,7 +110,32 @@ const WetlandDetail = () => {
                         </div>
 
                         <button
-                            onClick={() => navigate(`/map?focus=${id}`)}
+                            onClick={async () => {
+                                let centerLat = Number(data.wetlandLatitude ?? data.latitude);
+                                let centerLng = Number(data.wetlandLongitude ?? data.longitude);
+
+                                if (!Number.isFinite(centerLat) || !Number.isFinite(centerLng)) {
+                                    try {
+                                        const wetlandResponse = await axios.get(`http://localhost:5171/api/wetlands/${id}`);
+                                        centerLat = Number(wetlandResponse.data?.latitude);
+                                        centerLng = Number(wetlandResponse.data?.longitude);
+                                    } catch (err) {
+                                        console.error('Failed to fetch wetland coordinates for map redirect:', err);
+                                    }
+                                }
+
+                                if (Number.isFinite(centerLat) && Number.isFinite(centerLng)) {
+                                    navigate('/map', {
+                                        state: {
+                                            centerLat,
+                                            centerLng,
+                                            zoom: 14,
+                                        },
+                                    });
+                                } else {
+                                    navigate('/map');
+                                }
+                            }}
                             className="bg-primary hover:bg-primary/90 text-white px-4 py-3 md:px-6 md:py-4 rounded-xl text-xs md:text-sm font-extrabold uppercase tracking-widest shadow-xl shadow-primary/30 transition-all flex items-center justify-center gap-2 flex-shrink-0 w-full md:w-auto mt-2 md:mt-0"
                         >
                             <span className="material-symbols-outlined text-lg md:text-xl">public</span>

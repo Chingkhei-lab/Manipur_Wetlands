@@ -1,5 +1,8 @@
 using backend.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +16,34 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+var jwtKey = builder.Configuration["Jwt:Key"];
+if (string.IsNullOrWhiteSpace(jwtKey))
+{
+    throw new InvalidOperationException("JWT key is missing. Set Jwt:Key in User Secrets or environment variables.");
+}
+
+var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "manipur-wetlands";
+var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "manipur-wetlands-client";
+
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtIssuer,
+            ValidAudience = jwtAudience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
+builder.Services.AddAuthorization();
 
 // Configure EF Core Context
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -41,6 +72,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowReactFrontend");
+
+app.UseAuthentication();
 
 // Temporary DB update
 using (var scope = app.Services.CreateScope())

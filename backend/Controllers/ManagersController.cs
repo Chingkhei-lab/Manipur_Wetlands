@@ -1,8 +1,12 @@
 using backend.Data;
 using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Collections.Concurrent;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -13,13 +17,15 @@ namespace backend.Controllers
     public class ManagersController : ControllerBase
     {
         private readonly ManipurWetlandsContext _context;
+        private readonly IConfiguration _configuration;
 
         // In-memory store for registration codes: Code -> (ExpiresAt, Used)
         private static readonly ConcurrentDictionary<string, (DateTime ExpiresAt, bool Used)> _registrationCodes = new();
 
-        public ManagersController(ManipurWetlandsContext context)
+        public ManagersController(ManipurWetlandsContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         private static string HashPassword(string password)
@@ -30,9 +36,33 @@ namespace backend.Controllers
         }
 
         // POST: api/managers/login
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<object>> Login([FromBody] LoginRequest request)
         {
+            var adminEmail = _configuration["AdminAuth:Email"];
+            var adminPassword = _configuration["AdminAuth:Password"];
+
+            if (!string.IsNullOrWhiteSpace(adminEmail)
+                && !string.IsNullOrWhiteSpace(adminPassword)
+                && string.Equals(request.Email, adminEmail, StringComparison.OrdinalIgnoreCase)
+                && request.Password == adminPassword)
+            {
+                var token = GenerateJwtToken(0, "Admin User", request.Email, "admin");
+
+                return Ok(new
+                {
+                    token,
+                    user = new
+                    {
+                        id = 0,
+                        name = "Admin User",
+                        email = request.Email,
+                        role = "admin"
+                    }
+                });
+            }
+
             var manager = await _context.Managers
                 .FirstOrDefaultAsync(m => m.Email == request.Email);
 
@@ -46,8 +76,11 @@ namespace backend.Controllers
             if (!manager.IsActive)
                 return Unauthorized(new { message = "Your account has been deactivated. Contact the admin." });
 
+            var jwt = GenerateJwtToken(manager.Id, manager.FullName, manager.Email, "manager");
+
             return Ok(new
             {
+                token = jwt,
                 user = new
                 {
                     id = manager.Id,
@@ -59,6 +92,7 @@ namespace backend.Controllers
         }
 
         // POST: api/managers/register
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult<object>> Register([FromBody] RegisterRequest request)
         {
@@ -103,6 +137,7 @@ namespace backend.Controllers
         }
 
         // GET: api/managers/list
+        [Authorize(Roles = "admin")]
         [HttpGet("list")]
         public async Task<ActionResult<IEnumerable<object>>> GetManagers()
         {
@@ -123,6 +158,7 @@ namespace backend.Controllers
         }
 
         // POST: api/managers/generate-code
+        [Authorize(Roles = "admin")]
         [HttpPost("generate-code")]
         public ActionResult<object> GenerateCode()
         {
@@ -144,6 +180,7 @@ namespace backend.Controllers
         }
 
         // PUT: api/managers/{id}/toggle-status
+        [Authorize(Roles = "admin")]
         [HttpPut("{id}/toggle-status")]
         public async Task<ActionResult> ToggleStatus(int id)
         {
@@ -157,6 +194,7 @@ namespace backend.Controllers
         }
 
         // DELETE: api/managers/{id}
+        [Authorize(Roles = "admin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteManager(int id)
         {
@@ -175,6 +213,37 @@ namespace backend.Controllers
                 .Select(kv => kv.Key).ToList();
             foreach (var key in expiredKeys)
                 _registrationCodes.TryRemove(key, out _);
+        }
+
+        private string GenerateJwtToken(int userId, string name, string email, string role)
+        {
+            var jwtKey = _configuration["Jwt:Key"]
+                ?? throw new InvalidOperationException("Jwt:Key is not configured.");
+            var jwtIssuer = _configuration["Jwt:Issuer"] ?? "manipur-wetlands";
+            var jwtAudience = _configuration["Jwt:Audience"] ?? "manipur-wetlands-client";
+            var expiryMinutes = int.TryParse(_configuration["Jwt:ExpiryMinutes"], out var minutes) ? minutes : 120;
+
+            var claims = new List<Claim>
+            {
+                new(JwtRegisteredClaimNames.Sub, userId.ToString()),
+                new(JwtRegisteredClaimNames.Email, email),
+                new(ClaimTypes.Name, name),
+                new(ClaimTypes.Role, role),
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: jwtIssuer,
+                audience: jwtAudience,
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(expiryMinutes),
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         // Request DTOs

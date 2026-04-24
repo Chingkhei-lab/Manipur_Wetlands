@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../components/Header';
 import L from 'leaflet';
@@ -43,22 +43,13 @@ const MapController = ({ selectedWetland }) => {
     return null;
 };
 
-// Map focus component running AFTER map initialized
-const MapFocusController = ({ wetlands, focusId, setSelectedWetland }) => {
+const MapRecenter = ({ centerLat, centerLng, zoom }) => {
     const map = useMap();
 
     useEffect(() => {
-        if (!map || wetlands.length === 0 || !focusId) return;
-
-        const target = wetlands.find(w => w.commonId === focusId);
-        if (target && target.latitude && target.longitude) {
-            // Using a slightly longer timeout to ensure perfectly safe Leaflet canvas load
-            setTimeout(() => {
-                map.flyTo([target.latitude, target.longitude], 12, { duration: 1.5 });
-                setSelectedWetland(target);
-            }, 600);
-        }
-    }, [map, wetlands, focusId, setSelectedWetland]);
+        if (!Number.isFinite(centerLat) || !Number.isFinite(centerLng)) return;
+        map.flyTo([centerLat, centerLng], Number.isFinite(zoom) ? zoom : 14, { duration: 1.5 });
+    }, [map, centerLat, centerLng, zoom]);
 
     return null;
 };
@@ -66,9 +57,13 @@ const MapFocusController = ({ wetlands, focusId, setSelectedWetland }) => {
 const MapPage = () => {
     const [wetlands, setWetlands] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [searchParams] = useSearchParams();
-    const focusId = searchParams.get('focus');
     const [selectedWetland, setSelectedWetland] = useState(null);
+    const location = useLocation();
+
+    const centerLat = Number(location.state?.centerLat);
+    const centerLng = Number(location.state?.centerLng);
+    const targetZoom = Number(location.state?.zoom);
+    const hasRouteCenter = Number.isFinite(centerLat) && Number.isFinite(centerLng);
 
     useEffect(() => {
         const fetchWetlands = async () => {
@@ -77,11 +72,13 @@ const MapPage = () => {
                 setWetlands(response.data);
                 setIsLoading(false);
 
-                // Directly manage the sequence: After loading map data, if focus exists, select it
-                if (focusId && response.data.length > 0) {
-                    const focusTarget = response.data.find(w => w.commonId === focusId);
+                if (hasRouteCenter && response.data.length > 0) {
+                    const focusTarget = response.data.find((w) =>
+                        Math.abs(Number(w.latitude) - centerLat) < 1e-6
+                        && Math.abs(Number(w.longitude) - centerLng) < 1e-6
+                    );
                     if (focusTarget) {
-                        setTimeout(() => setSelectedWetland(focusTarget), 300);
+                        setSelectedWetland(focusTarget);
                     }
                 }
             } catch (err) {
@@ -91,7 +88,7 @@ const MapPage = () => {
         };
 
         fetchWetlands();
-    }, [focusId]);
+    }, [hasRouteCenter, centerLat, centerLng]);
 
     // Manipur constraints
     const centerPosition = [24.817, 93.936];
@@ -127,6 +124,7 @@ const MapPage = () => {
                             url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
                         />
                         <MapClickHandler onMapClick={() => setSelectedWetland(null)} />
+                        <MapRecenter centerLat={centerLat} centerLng={centerLng} zoom={targetZoom} />
                         <MapController selectedWetland={selectedWetland} />
 
                         {wetlands.map(wetland => {
